@@ -71,9 +71,9 @@ Ask Azra is a web application that allows users to ask questions, provide answer
    cd ask_azra
 2. Set up a virtual environment:
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    ```
 3. Install dependencies:
    ```bash
    pip install poetry
