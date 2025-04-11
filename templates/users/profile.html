@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0 fs-4">Profile</h4>
+                    <a href="{% url 'profile-update' %}" class="btn btn-sm btn-light">Edit Profile</a>
+                </div>
+                <div class="card-body">
+
+                    {% if user.profile.image %}
+
+                        <div class=" mb-3">
+                            <img src="{{ user.profile.image.url }}"
+                                 alt="{{ user.username }}"
+                                 class="rounded-circle"
+                                 style="width: 150px;
+                                        height: 150px;
+                                        object-fit: cover" />
+                        </div>
+
+                    {% endif %}
+                    <p>
+                        <strong>Username:</strong> {{ user.username }}
+                    </p>
+                    <p>
+                        <strong>Email:</strong> {{ user.email }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h3 class="mb-0">Your Questions</h3>
+                </div>
+                <div class="card-body">
+
+                    {% for question in user_questions %}
+
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5>
+                                    <a href="{% url 'question-detail' question.id %}"
+                                       class="text-decoration-none">{{ question.title }}</a>
+                                </h5>
+                                <div>
+                                    <a href="{% url 'question-update' question.id %}"
+                                       class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a href="{% url 'question-delete' question.id %}"
+                                       class="btn btn-sm btn-outline-danger">Delete</a>
+                                </div>
+                            </div>
+                            <small class="text-muted">Posted on {{ question.date_posted|date:"F d, Y" }}</small>
+                        </div>
+                    {% empty %}
+                        <p>You haven't asked any questions yet.</p>
+                        <a href="{% url 'ask-question' %}" class="btn btn-primary">Ask a Question</a>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-header bg-light">
+                    <h3 class="mb-0">Your Answers</h3>
+                </div>
+                <div class="card-body">
+
+                    {% for answer in user_answers %}
+
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p>
+                                    <a href="{% url 'question-detail' answer.question.id %}"
+                                       class="text-decoration-none">{{ answer.question.title }}</a>
+                                </p>
+                                <div>
+                                    <a href="{% url 'answer-update' answer.id %}"
+                                       class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a href="{% url 'answer-delete' answer.id %}"
+                                       class="btn btn-sm btn-outline-danger">Delete</a>
+                                </div>
+                            </div>
+                            <div>{{ answer.content|safe|truncatewords_html:20 }}</div>
+                            <small class="text-muted">Posted on {{ answer.date_posted|date:"F d, Y" }} | {{ answer.total_likes }} likes</small>
+                        </div>
+                    {% empty %}
+                        <p>You haven't answered any questions yet.</p>
+                        <a href="{% url 'home' %}" class="btn btn-primary">Browse Questions</a>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="mb-4">Latest Questions</h2>
+
+            {% for question in questions %}
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'question-detail' question.id %}"
+                               class="text-decoration-none">{{ question.title }}</a>
+                        </h5>
+                        <div class="card-text">{{ question.content|safe|truncatewords_html:30|striptags }}</div>
+                        <p class="card-text">
+                            <small class="text-muted">Posted by {{ question.author.username }} on {{ question.date_posted|date:"F d, Y" }}</small>
+                        </p>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">No questions yet. Be the first to ask!</div>
+
+            {% endfor %}
+
+            <!-- Pagination code here -->
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Ask a Question</h5>
+                </div>
+                <div class="card-body">
+                    <p>Have something to ask? Share your question with the community!</p>
+                    <a href="{% url 'ask-question' %}" class="btn btn-primary">Ask Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

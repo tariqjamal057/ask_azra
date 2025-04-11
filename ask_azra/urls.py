@@ -15,9 +15,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+
+from ask_azra import settings
+from ask_azra import views as errors
+
+handler404 = errors.custom_page_not_found_view
+handler500 = errors.custom_error_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("users/", include("users.urls")),
+    path("", include("questions.urls")),
+    path("ckeditor/upload/", include("ckeditor_uploader.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
